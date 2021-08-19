@@ -1,6 +1,7 @@
 // Run : node apogee-legacy-crypto-cipheriv.js
-
+// question: https://stackoverflow.com/questions/68713891/nodejs-recover-createcipher-data-with-createcipheriv
 const crypto = require('crypto');
+const EVP_BytesToKey = require('evp_bytestokey')
 const ALGO = 'aes192';
 const password = 'Your_Password_Here';
 const IV_SIZE = 16;
@@ -38,13 +39,11 @@ function decrypt_old(text) {
 }
 
 function decrypt_legacy_using_IV(text) {
-    const EVP_BytesToKey = require('evp_bytestokey')
-
     const result = EVP_BytesToKey(
       password,
       null,
       KEY_SIZE * 8, // byte to bit size
-      16
+      IV_SIZE
     )
 
     let decipher = crypto.createDecipheriv(ALGO, result.key, result.iv);
@@ -53,13 +52,11 @@ function decrypt_legacy_using_IV(text) {
 }
 
 function encrypt_legacy_using_IV(text) {
-    const EVP_BytesToKey = require('evp_bytestokey')
-
     const result = EVP_BytesToKey(
       password,
       null,
       KEY_SIZE * 8, // byte to bit size
-      16
+      IV_SIZE
     )
 
     var cipher = crypto.createCipheriv(ALGO, result.key, result.iv);
